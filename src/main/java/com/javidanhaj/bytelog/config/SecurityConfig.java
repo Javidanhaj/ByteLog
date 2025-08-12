@@ -1,5 +1,6 @@
 package com.javidanhaj.bytelog.config;
 
+import com.javidanhaj.bytelog.domain.entities.User;
 import com.javidanhaj.bytelog.repositories.UserRepository;
 import com.javidanhaj.bytelog.security.BlogUserDetailsService;
 import com.javidanhaj.bytelog.security.JwtAuthenticationFilter;
@@ -21,20 +22,32 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 public class SecurityConfig {
 
     @Bean
-    public JwtAuthenticationFilter jwtAuthenticationFilter(AuthenticationService authenticationService){
+    public JwtAuthenticationFilter jwtAuthenticationFilter(AuthenticationService authenticationService) {
         return new JwtAuthenticationFilter(authenticationService);
     }
 
     @Bean
-    public UserDetailsService userDetailsService(UserRepository userRepository){
-        return new BlogUserDetailsService(userRepository);
+    public UserDetailsService userDetailsService(UserRepository userRepository) {
+        BlogUserDetailsService blogUserDetailsService = new BlogUserDetailsService(userRepository);
+
+        String email = "user@test.com";
+        userRepository.findByEmail(email).orElseGet(() -> {
+            User newUser = User.builder()
+                    .name("Test user")
+                    .email(email)
+                    .password(passwordEncoder().encode("password"))
+                    .build();
+            return userRepository.save(newUser);
+        });
+
+        return blogUserDetailsService;
     }
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http, JwtAuthenticationFilter jwtAuthenticationFilter) throws Exception {
         http
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers(HttpMethod.POST, "/api/v1/auth").permitAll()
+                        .requestMatchers(HttpMethod.POST, "/api/v1/auth/login").permitAll()
                         .requestMatchers(HttpMethod.GET, "/api/v1/posts/**").permitAll()
                         .requestMatchers(HttpMethod.GET, "/api/v1/categories/**").permitAll()
                         .requestMatchers(HttpMethod.GET, "/api/v1/tags/**").permitAll()
@@ -48,7 +61,7 @@ public class SecurityConfig {
     }
 
     @Bean
-    public PasswordEncoder passwordEncoder(){
+    public PasswordEncoder passwordEncoder() {
         return PasswordEncoderFactories.createDelegatingPasswordEncoder();
     }
 
