@@ -3,9 +3,10 @@ package com.javidanhaj.bytelog.services.impl;
 import com.javidanhaj.bytelog.domain.entities.Category;
 import com.javidanhaj.bytelog.repositories.CategoryRepository;
 import com.javidanhaj.bytelog.services.CategoryService;
-import jakarta.transaction.Transactional;
+import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
@@ -36,11 +37,17 @@ public class CategoryServiceImpl implements CategoryService {
     public void deleteCategory(UUID id) {
         Optional<Category> category = categoryRepository.findById(id);
         if(category.isPresent()){
-            if(category.get().getPosts().size() > 0){
+            if(!category.get().getPosts().isEmpty()){
                 throw new IllegalStateException("Category has posts in it");
             }
             categoryRepository.deleteById(id);
         }
 
+    }
+
+    @Override
+    public Category getCategoryById(UUID id) {
+        return categoryRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("Category not found with id" + id));
     }
 }
