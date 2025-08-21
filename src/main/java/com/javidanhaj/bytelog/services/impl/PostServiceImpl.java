@@ -4,6 +4,7 @@ import com.javidanhaj.bytelog.domain.PostStatus;
 import com.javidanhaj.bytelog.domain.entities.Category;
 import com.javidanhaj.bytelog.domain.entities.Post;
 import com.javidanhaj.bytelog.domain.entities.Tag;
+import com.javidanhaj.bytelog.domain.entities.User;
 import com.javidanhaj.bytelog.repositories.PostRepository;
 import com.javidanhaj.bytelog.services.CategoryService;
 import com.javidanhaj.bytelog.services.PostService;
@@ -47,5 +48,10 @@ public class PostServiceImpl implements PostService {
         }
 
         return postRepository.findAllByStatus(PostStatus.PUBLISHED);
+    }
+
+    @Override
+    public List<Post> getDraftPosts(User user) {
+        return postRepository.findAllByAuthorAndStatus(user, PostStatus.DRAFT);
     }
 }
