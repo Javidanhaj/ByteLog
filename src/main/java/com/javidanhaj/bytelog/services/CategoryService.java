@@ -1,5 +1,6 @@
 package com.javidanhaj.bytelog.services;
 
+import com.javidanhaj.bytelog.domain.dtos.UpdateCategoryRequest;
 import com.javidanhaj.bytelog.domain.entities.Category;
 
 import java.util.List;
@@ -14,4 +15,7 @@ public interface CategoryService {
     void deleteCategory(UUID id);
 
     Category getCategoryById(UUID id);
+
+    Category updateCategory(UUID id, UpdateCategoryRequest updateCategoryRequest);
 }
+

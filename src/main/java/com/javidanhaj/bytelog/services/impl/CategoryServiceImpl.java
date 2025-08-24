@@ -1,5 +1,6 @@
 package com.javidanhaj.bytelog.services.impl;
 
+import com.javidanhaj.bytelog.domain.dtos.UpdateCategoryRequest;
 import com.javidanhaj.bytelog.domain.entities.Category;
 import com.javidanhaj.bytelog.repositories.CategoryRepository;
 import com.javidanhaj.bytelog.services.CategoryService;
@@ -27,7 +28,7 @@ public class CategoryServiceImpl implements CategoryService {
     @Override
     @Transactional
     public Category createCategory(Category category) {
-        if(categoryRepository.existsByNameIgnoreCase(category.getName())){
+        if (categoryRepository.existsByNameIgnoreCase(category.getName())) {
             throw new IllegalArgumentException("Category already exists with given name");
         }
         return categoryRepository.save(category);
@@ -36,8 +37,8 @@ public class CategoryServiceImpl implements CategoryService {
     @Override
     public void deleteCategory(UUID id) {
         Optional<Category> category = categoryRepository.findById(id);
-        if(category.isPresent()){
-            if(!category.get().getPosts().isEmpty()){
+        if (category.isPresent()) {
+            if (!category.get().getPosts().isEmpty()) {
                 throw new IllegalStateException("Category has posts in it");
             }
             categoryRepository.deleteById(id);
@@ -50,4 +51,17 @@ public class CategoryServiceImpl implements CategoryService {
         return categoryRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Category not found with id" + id));
     }
+
+    @Override
+    @Transactional
+    public Category updateCategory(UUID id, UpdateCategoryRequest updateCategoryRequest) {
+        Category existingCategory = categoryRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("Category not found with id: " + id));
+
+        existingCategory.setName(updateCategoryRequest.getName());
+
+        return categoryRepository.save(existingCategory);
+    }
+
 }
+
