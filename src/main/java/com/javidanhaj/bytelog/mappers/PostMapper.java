@@ -1,6 +1,10 @@
 package com.javidanhaj.bytelog.mappers;
 
+import com.javidanhaj.bytelog.domain.CreatePostRequest;
+import com.javidanhaj.bytelog.domain.UpdatePostRequest;
+import com.javidanhaj.bytelog.domain.dtos.CreatePostRequestDto;
 import com.javidanhaj.bytelog.domain.dtos.PostDto;
+import com.javidanhaj.bytelog.domain.dtos.UpdatePostRequestDto;
 import com.javidanhaj.bytelog.domain.entities.Post;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
@@ -14,5 +18,8 @@ public interface PostMapper {
     @Mapping(target = "tags", source = "tags")
     PostDto toDto(Post post);
 
+    CreatePostRequest toCreatePostRequest(CreatePostRequestDto dto);
+
+    UpdatePostRequest toUpdatePostRequest(UpdatePostRequestDto dto);
 
 }
