@@ -1,5 +1,6 @@
 package com.javidanhaj.bytelog.services.impl;
 
+import com.javidanhaj.bytelog.domain.dtos.UpdateTagRequest;
 import com.javidanhaj.bytelog.domain.entities.Tag;
 import com.javidanhaj.bytelog.repositories.TagRepository;
 import com.javidanhaj.bytelog.services.TagService;
@@ -26,19 +27,11 @@ public class TagServiceImpl implements TagService {
     @Override
     public List<Tag> createTags(Set<String> tagNames) {
         List<Tag> existingTags = tagRepository.findByNameIn(tagNames);
-        Set<String> existingTagNames = existingTags.stream()
-                .map(Tag::getName)
-                .collect(Collectors.toSet());
+        Set<String> existingTagNames = existingTags.stream().map(Tag::getName).collect(Collectors.toSet());
 
-        List<Tag> newTags =  tagNames.stream()
-                .filter(name -> !existingTagNames.contains(name))
-                .map(name -> Tag.builder()
-                        .name(name)
-                        .posts(new HashSet<>())
-                        .build())
-                .toList();
+        List<Tag> newTags = tagNames.stream().filter(name -> !existingTagNames.contains(name)).map(name -> Tag.builder().name(name).posts(new HashSet<>()).build()).toList();
         List<Tag> savedTags = new ArrayList<>();
-        if(!newTags.isEmpty()){
+        if (!newTags.isEmpty()) {
             savedTags = tagRepository.saveAll(newTags);
         }
 
@@ -50,7 +43,7 @@ public class TagServiceImpl implements TagService {
     @Override
     public void deleteTag(UUID id) {
         tagRepository.findById(id).ifPresent(tag -> {
-            if(!tag.getPosts().isEmpty()){
+            if (!tag.getPosts().isEmpty()) {
                 throw new IllegalStateException("Cannot delete tag with posts");
             }
             tagRepository.deleteById(id);
@@ -59,7 +52,29 @@ public class TagServiceImpl implements TagService {
 
     @Override
     public Tag getTagById(UUID id) {
-        return  tagRepository.findById(id)
-                .orElseThrow(() -> new EntityNotFoundException("Tag not found with id" + id));
+        return tagRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("Tag not found with id" + id));
+    }
+
+    @Override
+    public List<Tag> getTagByIds(Set<UUID> ids) {
+        List<Tag> foundTags = tagRepository.findAllById(ids);
+        if (foundTags.size() != ids.size()) {
+            throw new EntityNotFoundException("Not all tag IDs exist");
+        }
+        return foundTags;
+    }
+
+    @Override
+    @Transactional
+    public Tag updateTag(UUID id, UpdateTagRequest updateTagRequest) {
+        Tag existingTag = tagRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Tag not found with id: " + id));
+
+        if (tagRepository.existsByNameAndIdNot(updateTagRequest.getName(), id)) {
+            throw new RuntimeException("Tag with name '" + updateTagRequest.getName() + "' already exists");
+        }
+
+        existingTag.setName(updateTagRequest.getName());
+        return tagRepository.save(existingTag);
     }
 }
