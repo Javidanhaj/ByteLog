@@ -16,9 +16,9 @@ import org.springframework.web.bind.annotation.RestController;
 public class ErrorController {
 
     @ExceptionHandler(Exception.class)
-    public ResponseEntity<ApiErrorResponse> handleException(Exception ex){
+    public ResponseEntity<ApiErrorResponse> handleException(Exception ex) {
         log.error("Caught exception", ex);
-        ApiErrorResponse error =  ApiErrorResponse.builder()
+        ApiErrorResponse error = ApiErrorResponse.builder()
                 .status(HttpStatus.INTERNAL_SERVER_ERROR.value())
                 .message("An unexpected error occurred!")
                 .build();
@@ -26,38 +26,38 @@ public class ErrorController {
     }
 
     @ExceptionHandler(IllegalArgumentException.class)
-    public ResponseEntity<ApiErrorResponse> handleIllegalArgumentException(IllegalArgumentException ex){
+    public ResponseEntity<ApiErrorResponse> handleIllegalArgumentException(IllegalArgumentException ex) {
         ApiErrorResponse error = ApiErrorResponse.builder()
                 .status(HttpStatus.BAD_REQUEST.value())
                 .message(ex.getMessage()) //This shouldn't expose internal messages,
                 .build();                 // but I used it like this for development, so this must be changed
-        return new ResponseEntity<>(error, HttpStatus.BAD_REQUEST );
+        return new ResponseEntity<>(error, HttpStatus.BAD_REQUEST);
     }
 
     @ExceptionHandler(IllegalStateException.class)
-    public ResponseEntity<ApiErrorResponse> handleIllegalStateException(IllegalStateException ex){
+    public ResponseEntity<ApiErrorResponse> handleIllegalStateException(IllegalStateException ex) {
         ApiErrorResponse error = ApiErrorResponse.builder()
                 .status(HttpStatus.CONFLICT.value())
                 .message(ex.getMessage()) //This shouldn't expose internal messages,
                 .build();                 // but I used it like this for development, so this must be changed
-        return new ResponseEntity<>(error, HttpStatus.CONFLICT );
+        return new ResponseEntity<>(error, HttpStatus.CONFLICT);
     }
 
     @ExceptionHandler(BadCredentialsException.class)
-    public ResponseEntity<ApiErrorResponse> handleBadCredentialsException(BadCredentialsException ex){
+    public ResponseEntity<ApiErrorResponse> handleBadCredentialsException(BadCredentialsException ex) {
         ApiErrorResponse error = ApiErrorResponse.builder()
                 .status(HttpStatus.UNAUTHORIZED.value())
                 .message(ex.getMessage()) //This shouldn't expose internal messages,
                 .build();                 // but I used it like this for development, so this must be changed
-        return new ResponseEntity<>(error, HttpStatus.UNAUTHORIZED );
+        return new ResponseEntity<>(error, HttpStatus.UNAUTHORIZED);
     }
 
     @ExceptionHandler(EntityNotFoundException.class)
-    public ResponseEntity<ApiErrorResponse> handleEntityNotFoundException(EntityNotFoundException ex){
+    public ResponseEntity<ApiErrorResponse> handleEntityNotFoundException(EntityNotFoundException ex) {
         ApiErrorResponse error = ApiErrorResponse.builder()
                 .status(HttpStatus.NOT_FOUND.value())
                 .message(ex.getMessage()) //This shouldn't expose internal messages,
                 .build();                 // but I used it like this for development, so this must be changed
-        return new ResponseEntity<>(error, HttpStatus.NOT_FOUND );
+        return new ResponseEntity<>(error, HttpStatus.NOT_FOUND);
     }
 }

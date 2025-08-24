@@ -12,8 +12,11 @@ import java.util.UUID;
 
 @Entity
 @Table(name = "posts")
-@NoArgsConstructor @AllArgsConstructor
-@Getter @Setter @Builder
+@NoArgsConstructor
+@AllArgsConstructor
+@Getter
+@Setter
+@Builder
 public class Post {
 
     @Id
@@ -68,7 +71,7 @@ public class Post {
     }
 
     @PrePersist
-    protected void onCreate(){
+    protected void onCreate() {
         LocalDateTime now = LocalDateTime.now();
         this.createdAt = now;
         this.updatedAt = now;

@@ -9,7 +9,8 @@ import java.util.List;
 
 @Data
 @Builder
-@NoArgsConstructor @AllArgsConstructor
+@NoArgsConstructor
+@AllArgsConstructor
 public class ApiErrorResponse {
 
     private int status;
@@ -19,8 +20,9 @@ public class ApiErrorResponse {
     //Nested class for better having an error list
     @Data
     @Builder
-    @NoArgsConstructor @AllArgsConstructor
-    public static class FieldError{
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class FieldError {
         private String field;
         private String message;
     }

@@ -9,7 +9,8 @@ import java.util.UUID;
 
 @Data
 @Builder
-@NoArgsConstructor @AllArgsConstructor
+@NoArgsConstructor
+@AllArgsConstructor
 public class CategoryDto {
 
     private UUID id;

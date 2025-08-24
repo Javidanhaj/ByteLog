@@ -10,9 +10,11 @@ import java.util.Objects;
 import java.util.UUID;
 
 @Entity
-@Table( name = "users")
-@NoArgsConstructor @AllArgsConstructor
-@Getter @Setter
+@Table(name = "users")
+@NoArgsConstructor
+@AllArgsConstructor
+@Getter
+@Setter
 @Builder
 public class User {
 
@@ -48,7 +50,7 @@ public class User {
     }
 
     @PrePersist
-    protected void onCreate(){
+    protected void onCreate() {
         this.createdAt = LocalDateTime.now();
     }
 }

@@ -11,8 +11,11 @@ import java.util.UUID;
 
 @Entity
 @Table(name = "categories")
-@NoArgsConstructor @AllArgsConstructor
-@Getter @Setter @Builder
+@NoArgsConstructor
+@AllArgsConstructor
+@Getter
+@Setter
+@Builder
 public class Category {
 
     @Id

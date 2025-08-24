@@ -56,7 +56,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
         return userDetailsService.loadUserByUsername(username);
     }
 
-    private String extractUsername(String token){
+    private String extractUsername(String token) {
         Claims claims = Jwts.parserBuilder()
                 .setSigningKey(getSigningKey())
                 .build()
@@ -65,7 +65,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
         return claims.getSubject();
     }
 
-    private Key getSigningKey(){
+    private Key getSigningKey() {
         byte[] keyBytes = secretKey.getBytes();
         return Keys.hmacShaKeyFor(keyBytes);
     }

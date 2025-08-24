@@ -10,7 +10,8 @@ import lombok.NoArgsConstructor;
 
 @Data
 @Builder
-@NoArgsConstructor @AllArgsConstructor
+@NoArgsConstructor
+@AllArgsConstructor
 public class CreateCategoryRequest {
 
     @NotBlank(message = "Category name is required!")

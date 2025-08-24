@@ -11,7 +11,8 @@ import java.util.Set;
 import java.util.UUID;
 
 @Data
-@AllArgsConstructor @NoArgsConstructor
+@AllArgsConstructor
+@NoArgsConstructor
 @Builder
 public class PostDto {
 
